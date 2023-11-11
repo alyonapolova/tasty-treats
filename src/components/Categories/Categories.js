@@ -23,15 +23,15 @@ const refs = {
   ingredientsEl: document.querySelector('.ingredients-select'),
   ratingBackdrop: document.querySelector('.rating-backdrop'),
   gallery: document.querySelector('.gallery'),
-  button1: document.querySelector('.btn-center1'),
-  button2: document.querySelector('.btn-center2'),
-  button3: document.querySelector('.btn-center3'),
+  // button1: document.querySelector('.btn-center1'),
+  // button2: document.querySelector('.btn-center2'),
+  // button3: document.querySelector('.btn-center3'),
 
-  btn_right: document.querySelector('.btn-right'),
-  btn_end: document.querySelector('.btn-right-end'),
+  // btn_right: document.querySelector('.btn-right'),
+  // btn_end: document.querySelector('.btn-right-end'),
 
-  btn_start: document.querySelector('.btn-left1'),
-  btn_left: document.querySelector('.btn-left'),
+  // btn_start: document.querySelector('.btn-left1'),
+  // btn_left: document.querySelector('.btn-left'),
 
   btn_all_categories: document.querySelector('.btn-all-categories'),
   resetFilter: document.querySelector('.reset-filter'),
@@ -63,9 +63,9 @@ axiosRecipesInstance.getFilteredData(areaRef).then(areas => {
     optionEl.classList.add('option-text');
     refs.areaMob.appendChild(optionEl);
   });
-  // const slimSelect = new SlimSelect({
-  //   select: refs.areaMob,
-  // });
+  const slimSelect = new SlimSelect({
+    select: refs.areaMob,
+  });
 });
 
 axiosRecipesInstance.getFilteredData(areaRef).then(areas => {
@@ -91,9 +91,9 @@ axiosRecipesInstance.getFilteredData(ingredientsRef).then(ingredients => {
     optionEl.classList.add('option-text');
     refs.ingredientsEl.appendChild(optionEl);
   });
-  // const slimSelect = new SlimSelect({
-  //   select: refs.ingredientsEl,
-  // });
+  const slimSelect = new SlimSelect({
+    select: refs.ingredientsEl,
+  });
 });
 selectTime();
 function selectTime() {
@@ -105,9 +105,9 @@ function selectTime() {
     refs.timeEl.appendChild(optionEl);
   }
 
-  // const slimSelectEl = new SlimSelect({
-  //   select: refs.timeEl,
-  // });
+  const slimSelectEl = new SlimSelect({
+    select: refs.timeEl,
+  });
 }
 
 selectTimeMob();
@@ -123,9 +123,9 @@ function selectTimeMob() {
     refs.timeMob.appendChild(optionEl);
   }
 
-  // const slimSelectEl = new SlimSelect({
-  //   select: refs.timeMob,
-  // });
+  const slimSelectEl = new SlimSelect({
+    select: refs.timeMob,
+  });
 }
 
 /////////////////////////Отримуємо обрані значення
@@ -350,9 +350,8 @@ function resetAllFilters() {
   refs.timeMob.value = '';
   refs.areaMob.value = '';
   refs.ingredientsEl.value = '';
-  // if()
-  // activeCategories.classList.remove('active') ?? null;
-  console.log(selectedCategoryId);
+
+  
   axiosCardInstance.category = selectedCategoryId;
   axiosCardInstance.area = null;
   axiosCardInstance.time = null;
@@ -361,7 +360,7 @@ function resetAllFilters() {
   axiosCardInstance.page = 1;
   refs.inputEl.value = '';
 
-  //refs.areaEl.firstElementChild.textContent;//як повернути 1 option при скиданні фільтрів
+  
 
   console.log(refs.areaEl.firstElementChild.textContent);
   console.log('resetAllFilters:', axiosCardInstance);
@@ -376,10 +375,7 @@ function displayAllCategories(e) {
   activeCategories = e.target;
   e.target.classList.add('active');
   axiosCardInstance.category = null;
-  // axiosCardInstance.time = selectedTimeId;
-  // axiosCardInstance.area = selectedAreaId;
-  // axiosCardInstance.ingredients = selectedIngredientsId;
-  // axiosCardInstance.title = inputValue;
+
 
   showRecipesAdapt();
 
@@ -471,21 +467,4 @@ async function addFavorite(e) {
   }
 }
 
-// refs.gallery.addEventListener('click', seeRecipe);
 
-// function seeRecipe(evt) {
-//   if (evt.target.tagName !== 'BUTTON') {
-//     return;
-//   }
-//   if (evt.target.innerText === 'See recipe') {
-//     const recipeId = evt.target.id;
-//     fetchRecipeById(recipeId)
-//       .then(res => {
-//         console.log(res);
-//         refs.ratingBackdrop.classList.toggle('visible');
-//       })
-//       .catch(error => {
-//         console.error('Error:', error);
-//       });
-//   }
-// }

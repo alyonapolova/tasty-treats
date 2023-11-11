@@ -10,7 +10,6 @@ export class axiosCard {
   time = '';
   tags = '';
 
-
   limit = 6;
 
   async getCardData() {
