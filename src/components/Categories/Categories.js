@@ -118,7 +118,7 @@ function selectTimeMob() {
   });
 }
 
-/////////////////////////Отримуємо обрані значення
+// Отримуємо обрані значення
 let selectedCategoryId;
 let selectedAreaId;
 let selectedIngredientsId;
@@ -195,7 +195,6 @@ function handleTime(e) {
   selectedTimeId = e.target.value;
   axiosCardInstance.time = selectedTimeId;
   arayRecept = selectedTimeId;
-  //console.log('timeId:', selectedTimeId);
   showRecipes();
 }
 
@@ -209,7 +208,7 @@ function handleIngredients(e) {
   showRecipes();
 }
 
-/////////////////////////////Адаптив
+// Адаптив
 
 if (window.screen.width >= 1280) {
   limitID = 9;
@@ -225,7 +224,8 @@ if (window.screen.width >= 1280) {
   showRecipesAdapt();
 }
 
-//////////////////////////Якщо рецептів не знайдено, або показати рецепти
+// Якщо рецептів не знайдено, або показати рецепти
+
 function showRecipes() {
   axiosCardInstance.getCardData().then(data => {
     totalPages = data.totalPages;
@@ -246,17 +246,38 @@ function showRecipesAdapt() {
   });
 }
 
-// pagination /////////////////////////// pagination/////////////////////////// pagination
+// pagination
 const container = document.getElementById('pagination');
+
 const options = {
   totalItems: 500,
-  itemsPerPage: 12,
+  itemsPerPage: 9,
   visiblePages: 3,
   centerAlign: true,
 };
 
 const pagination = new Pagination(container, options);
-pagination.on('beforeMove', function (eventData) {});
+
+const updatePaginationTotalItems = totalPages => {
+  const totalItems = totalPages * 9;
+  pagination.setTotalItems(totalItems);
+};
+
+pagination.on('afterMove', eventData => {
+  axiosCardInstance.page = eventData.page;
+  axiosCardInstance.getCardData().then(data => {
+    totalPages = data.totalPages;
+    updatePaginationTotalItems(totalPages);
+    refs.gallery.innerHTML = createGalleryCard(data.results);
+  });
+  console.log('eventData', eventData.page);
+});
+
+axiosCardInstance.getCardData().then(data => {
+  const totalPages = data.totalPages;
+
+  updatePaginationTotalItems(totalPages);
+});
 
 // refs.button1.addEventListener('click', e => {
 //   axiosCardInstance.page = 1;
@@ -336,9 +357,7 @@ pagination.on('beforeMove', function (eventData) {});
 //   });
 // });
 
-// pagination/////////////////////////// pagination/////////////////////////// pagination
-
-/////////////////////////////Cкинути фільтри
+//Cкинути фільтри
 refs.resetFilter.addEventListener('click', resetAllFilters);
 
 function resetAllFilters() {
@@ -408,7 +427,7 @@ function displayAllCategories(e) {
 
 // }
 
-///////////////////////////  ADD TO  FAVORITE ///////////////
+//  ADD TO  FAVORITE
 const KEY_FAVORITE = 'favorite';
 let favoriteArr = JSON.parse(localStorage.getItem(KEY_FAVORITE)) ?? [];
 
@@ -432,9 +451,7 @@ async function addFavorite(e) {
     return;
   }
   if (e.target.classList.contains('btn-heard')) {
-    console.log('Add to favorites');
     const recipeId = e.target.id;
-    console.log('recipeId:', recipeId);
 
     const inStorage = favoriteArr.some(({ _id }) => _id === recipeId); //якщо вже в локал сторажд
     if (inStorage) {
