@@ -125,7 +125,7 @@ let selectedIngredientsId;
 let selectedTimeId;
 let inputValue;
 let totalPages = 1;
-let arayRecept;
+let arrayRecept;
 let limitID;
 let results = [];
 
@@ -141,6 +141,7 @@ function handleCategory(e) {
     axiosCardInstance.page = 1;
 
     showRecipes();
+    pagination.movePageTo(1);
 
     if (activeCategories !== undefined) {
       activeCategories.classList.remove('active');
@@ -155,19 +156,16 @@ refs.inputEl.addEventListener('input', debounce(handleInputEl, 300));
 function handleInputEl(e) {
   inputValue = e.target.value.trim();
   axiosCardInstance.title = inputValue;
-  console.log(inputValue);
-
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 refs.areaMob.addEventListener('change', handleAreaMob);
 function handleAreaMob(e) {
   selectedAreaId = e.target.value;
   axiosCardInstance.area = selectedAreaId;
-
-  console.log('areaId:', selectedAreaId);
-
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 refs.areaEl.addEventListener('change', handleArea);
@@ -175,9 +173,8 @@ refs.areaEl.addEventListener('change', handleArea);
 function handleArea(e) {
   selectedAreaId = e.target.value;
   axiosCardInstance.area = selectedAreaId;
-
-  console.log('areaId:', selectedAreaId);
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 refs.timeMob.addEventListener('change', handleTimeMob);
@@ -185,8 +182,9 @@ refs.timeMob.addEventListener('change', handleTimeMob);
 function handleTimeMob(e) {
   selectedTimeId = e.target.value;
   axiosCardInstance.time = selectedTimeId;
-  arayRecept = selectedTimeId;
+  arrayRecept = selectedTimeId;
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 refs.timeEl.addEventListener('change', handleTime);
@@ -194,18 +192,20 @@ refs.timeEl.addEventListener('change', handleTime);
 function handleTime(e) {
   selectedTimeId = e.target.value;
   axiosCardInstance.time = selectedTimeId;
-  arayRecept = selectedTimeId;
+  arrayRecept = selectedTimeId;
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 refs.ingredientsEl.addEventListener('change', handleIngredients);
 
 function handleIngredients(e) {
   selectedIngredientsId = e.target.value;
-  console.log(e.target.value);
+
   axiosCardInstance.ingredients = selectedIngredientsId;
-  console.log('ingredientsId:', selectedIngredientsId);
+
   showRecipes();
+  pagination.movePageTo(1);
 }
 
 // Адаптив
@@ -213,12 +213,12 @@ function handleIngredients(e) {
 if (window.screen.width >= 1280) {
   limitID = 9;
   axiosCardInstance.limit = limitID;
-  arayRecept = limitID;
+  arrayRecept = limitID;
   showRecipesAdapt();
 } else if (window.screen.width >= 768) {
   limitID = 8;
   axiosCardInstance.limit = limitID;
-  arayRecept = limitID;
+  arrayRecept = limitID;
   showRecipesAdapt();
 } else {
   showRecipesAdapt();
@@ -232,8 +232,7 @@ function showRecipes() {
     if (totalPages === null) {
       Notiflix.Notify.info("😪 We don't have recipes for your request!");
     }
-    // results = data.results
-    console.log('Обрані рецепти', data);
+
     totalPages = data.totalPages;
     refs.gallery.innerHTML = createGalleryCard(data.results);
   });
@@ -249,17 +248,20 @@ function showRecipesAdapt() {
 // pagination
 const container = document.getElementById('pagination');
 
-const options = {
+const option = {
   totalItems: 500,
   itemsPerPage: 9,
   visiblePages: 3,
   centerAlign: true,
 };
-
-const pagination = new Pagination(container, options);
+const pagination = new Pagination(container, option);
 
 const updatePaginationTotalItems = totalPages => {
-  const totalItems = totalPages * 9;
+  const screenWidth = window.innerWidth;
+  const itemsPerPage = screenWidth >= 768 && screenWidth < 1280 ? 8 : 9;
+
+  const totalItems = totalPages * itemsPerPage;
+
   pagination.setTotalItems(totalItems);
 };
 
@@ -279,84 +281,6 @@ axiosCardInstance.getCardData().then(data => {
   updatePaginationTotalItems(totalPages);
 });
 
-// refs.button1.addEventListener('click', e => {
-//   axiosCardInstance.page = 1;
-//   console.log('fffff');
-//   axiosCardInstance.getCardData().then(data => {
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-
-// refs.button2.addEventListener('click', e => {
-//   console.log(totalPages);
-//   if (totalPages === 2) {
-//     return;
-//   } else {
-//     axiosCardInstance.page = e.currentTarget.innerText;
-
-//     axiosCardInstance.getCardData().then(data => {
-//       console.log('це рецепти', data);
-//       refs.gallery.innerHTML = createGalleryCard(data.results);
-//     });
-//   }
-// });
-// refs.button3.addEventListener('click', e => {
-//   console.log(totalPages);
-//   if (totalPages === 3) {
-//     return;
-//   }
-//   axiosCardInstance.page = e.currentTarget.innerText;
-
-//   axiosCardInstance.getCardData().then(data => {
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-
-// refs.btn_right.addEventListener('click', e => {
-//   console.log(totalPages);
-//   if (totalPages === axiosCardInstance.page) {
-//     return;
-//   }
-//   axiosCardInstance.page++;
-//   axiosCardInstance.getCardData().then(data => {
-//     totalPages = data.totalPages;
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-// refs.btn_end.addEventListener('click', e => {
-//   console.log(totalPages);
-
-//   axiosCardInstance.page = totalPages;
-//   axiosCardInstance.getCardData().then(data => {
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-// refs.btn_left.addEventListener('click', e => {
-//   if (axiosCardInstance.page === 1) {
-//     return;
-//   }
-//   console.log('ffff');
-//   axiosCardInstance.page = axiosCardInstance.page--;
-//   console.log(axiosCardInstance.page--);
-//   axiosCardInstance.getCardData().then(data => {
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-
-// refs.btn_start.addEventListener('click', e => {
-//   axiosCardInstance.page = 1;
-//   console.log(axiosCardInstance.page);
-//   axiosCardInstance.getCardData().then(data => {
-//     console.log('це рецепти', data);
-//     refs.gallery.innerHTML = createGalleryCard(data.results);
-//   });
-// });
-
 //Cкинути фільтри
 refs.resetFilter.addEventListener('click', resetAllFilters);
 
@@ -374,10 +298,8 @@ function resetAllFilters() {
   axiosCardInstance.title = null;
   axiosCardInstance.page = 1;
   refs.inputEl.value = '';
-
-  console.log(refs.areaEl.firstElementChild.textContent);
-  console.log('resetAllFilters:', axiosCardInstance);
   showRecipesAdapt();
+  pagination.movePageTo(1);
 }
 
 refs.btn_all_categories.addEventListener('click', displayAllCategories);
@@ -397,35 +319,6 @@ function displayAllCategories(e) {
   activeCategories = e.target;
   e.target.classList.add('active');
 }
-
-// function colorRating (searchResults){
-//   const ratings = searchResults.flatMap(({ rating }) => rating);
-
-//   if (ratings.length > 0){
-//       initRatings();
-//    }
-
-//   function initRatings(){
-//       let ratingActive, ratingValue;
-//       for (let index = 0; index < ratings.length; index++){
-//           const rating = ratings[index];
-//           console.log(rating);
-//           initRatingVars(rating);
-//           setRatingActiveWidth(rating);
-//       }
-
-//       function initRatingVars(){
-//           ratingActive = document.querySelector('.rating-active');
-//           ratingValue = document.querySelector('.rating-value');
-//        }
-
-//        function setRatingActiveWidth(rating){
-//           const ratingActiveWidth = rating / 0.05;
-//           ratingActive.style.width = `${ratingActiveWidth}%`;
-//        }
-//   }
-
-// }
 
 //  ADD TO  FAVORITE
 const KEY_FAVORITE = 'favorite';
