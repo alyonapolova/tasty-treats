@@ -234,6 +234,8 @@ function showRecipes() {
     }
 
     totalPages = data.totalPages;
+    if (totalPages <= 3) {
+    }
     refs.gallery.innerHTML = createGalleryCard(data.results);
   });
 }
@@ -252,7 +254,6 @@ const option = {
   totalItems: 500,
   itemsPerPage: 9,
   visiblePages: 3,
-  centerAlign: true,
 };
 const pagination = new Pagination(container, option);
 
