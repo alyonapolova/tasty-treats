@@ -6,7 +6,7 @@ import { createGalleryCard } from './galleryCard';
 import { axiosRecipes } from './axiosRecipes';
 import { axiosCard } from './axiosCategories';
 import Pagination from 'tui-pagination';
-import 'tui-pagination/dist/tui-pagination.css';
+//import 'tui-pagination/dist/tui-pagination.css';
 
 const BASE_URL = 'https://tasty-treats-backend.p.goit.global/api/';
 const categoriesRef = 'categories';
@@ -254,6 +254,7 @@ const option = {
   totalItems: 500,
   itemsPerPage: 9,
   visiblePages: 3,
+  centerAlign: true,
 };
 const pagination = new Pagination(container, option);
 
